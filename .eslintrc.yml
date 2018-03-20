@@ -1,0 +1,13 @@
+parser: babel-eslint
+extends:
+  - airbnb-base
+  - prettier
+  - prettier/flowtype
+plugins:
+  - flowtype
+  - jest
+rules:
+  valid-typeof:
+    - error
+    -
+      requireStringLiterals: false

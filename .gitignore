@@ -1,0 +1,8 @@
+# package directories
+/lib
+/config/local.*
+node_modules
+jspm_packages
+
+# Jest data
+__coverage__

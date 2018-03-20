@@ -1,0 +1,88 @@
+{
+  "name": "@keyv/dynamodb",
+  "version": "0.0.0-development",
+  "description": "Dynamo DB storage for the Keyv project",
+  "main": "lib/index.js",
+  "author": "Mateu Aguiló Bosch <mateu.aguilo.bosch@gmail.com>",
+  "license": "GPL-2.0",
+  "scripts": {
+    "build": "rimraf lib && flow-remove-types --all src/ --out-dir lib/",
+    "prepare": "yarn build",
+    "test": "jest --coverage",
+    "readme": "emdaer && git add *.md .emdaer/.offline",
+    "lint": "eslint --ignore-path .gitignore .",
+    "flow": "flow",
+    "precommit": "yarn build && yarn lint && yarn flow && yarn readme",
+    "prepush": "yarn lint && yarn flow && yarn test",
+    "commitmsg": "commitlint -e $GIT_PARAMS",
+    "semantic-release": "semantic-release",
+    "clean-scratch": "rimraf scratch/ && mkdir scratch"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^6.1.3",
+    "@commitlint/config-angular": "^6.1.3",
+    "@emdaer/cli": "^2.0.0",
+    "@emdaer/plugin-contributors-details-github": "^2.0.0",
+    "@emdaer/plugin-license-reference": "^2.0.0",
+    "@emdaer/plugin-value-from-package": "^2.0.0",
+    "@emdaer/transform-prettier": "^2.0.0",
+    "@emdaer/transform-table-of-contents": "^2.0.0",
+    "babel-eslint": "^8.2.2",
+    "condition-noop": "^1.0.0",
+    "eslint": "^4.19.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-flowtype": "^2.46.1",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "^21.15.0",
+    "flow-bin": "^0.68.0",
+    "flow-copy-source": "^1.3.0",
+    "flow-remove-types": "^1.2.3",
+    "husky": "^0.14.3",
+    "jest": "^22.4.2",
+    "jest-environment-node-debug": "^2.0.0",
+    "jest-flow-transform": "^1.0.1",
+    "last-release-git": "^0.0.3",
+    "prettier": "^1.11.1",
+    "rimraf": "^2.6.2",
+    "semantic-release-conventional-commits": "^2.0.0"
+  },
+  "jest": {
+    "coverageDirectory": "__coverage__",
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    },
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/__tests__/**/*.js"
+    ],
+    "transform": {
+      "^.+\\.js(?:\\.flow)?$": "jest-flow-transform"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/e0ipso/keyv-dynamo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/e0ipso/keyv-dynamo/issues"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-angular"
+    ]
+  },
+  "homepage": "https://github.com/e0ipso/keyv-dynamo#readme",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "private": false,
+  "dependencies": {
+    "aws-sdk": "^2.211.1"
+  }
+}
