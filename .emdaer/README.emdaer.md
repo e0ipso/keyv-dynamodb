@@ -4,7 +4,7 @@
 - value: name
 -->
     </br>
-    <img src="https://commons.wikimedia.org/wiki/File:DynamoDB.png#/media/File:DynamoDB.png" alt="Keyv DynamoDB logo" title="Keyv DynamoDB logo" width="100">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fd/DynamoDB.png" alt="Keyv DynamoDB logo" title="Keyv DynamoDB logo" width="100">
 </h1>
 <p align="center">
 <!--emdaer-p

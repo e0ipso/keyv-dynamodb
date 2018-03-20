@@ -7,7 +7,7 @@
 <p></p><h1 align="center">
 @keyv/dynamodb
     <br>
-    <img src="https://commons.wikimedia.org/wiki/File:DynamoDB.png#/media/File:DynamoDB.png" alt="Keyv DynamoDB logo" title="Keyv DynamoDB logo" width="100">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fd/DynamoDB.png" alt="Keyv DynamoDB logo" title="Keyv DynamoDB logo" width="100">
 </h1><p></p>
 <p></p><p align="center">
 Dynamo DB storage for the Keyv project
