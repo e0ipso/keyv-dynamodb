@@ -23,7 +23,7 @@ Dynamo DB storage for the Keyv project
 <li><a href="#license">License</a></li>
 </ul>
 
-<p>· <a href="https://travis-ci.org/e0ipso/keyv-dynamodb/"><img src="https://img.shields.io/travis/e0ipso/keyv-dynamodb.svg?style=flat-square" alt="Travis"></a> <a href="https://github.com/emdaer/emdaer"><img src="https://img.shields.io/badge/📓-documented%20with%20emdaer-F06632.svg?style=flat-square" alt="Documented with emdaer"></a></p>
+<p>· <a href="https://travis-ci.org/e0ipso/keyv-dynamodb/"><img src="https://img.shields.io/travis/e0ipso/keyv-dynamodb.svg?style=flat-square" alt="Travis"></a> <a href="https://coveralls.io/github/e0ipso/keyv-dynamodb/"><img src="https://img.shields.io/coveralls/github/e0ipso/keyv-dynamodb.svg?style=flat-square" alt="Coverage"></a> <a href="https://github.com/emdaer/emdaer"><img src="https://img.shields.io/badge/📓-documented%20with%20emdaer-F06632.svg?style=flat-square" alt="Documented with emdaer"></a></p>
 <h2 id="install">Install</h2>
 <ol>
 <li><code>yarn add @keyv/dynamodb</code></li>
