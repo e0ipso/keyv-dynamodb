@@ -23,6 +23,7 @@ Dynamo DB storage for the Keyv project
 <li><a href="#license">License</a></li>
 </ul>
 
+<p>· <a href="https://travis-ci.org/e0ipso/keyv-dynamodb/"><img src="https://img.shields.io/travis/e0ipso/keyv-dynamodb.svg?style=flat-square" alt="Travis"></a> <a href="https://github.com/emdaer/emdaer"><img src="https://img.shields.io/badge/📓-documented%20with%20emdaer-F06632.svg?style=flat-square" alt="Documented with emdaer"></a></p>
 <h2 id="install">Install</h2>
 <ol>
 <li><code>yarn add @keyv/dynamodb</code></li>
@@ -32,14 +33,20 @@ fields. It is important to keep the field names as provided in the example. You
 will need to provision the <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ProvisionedThroughput.html">DynamoDB capacities</a>
 based on your expected usage. Execute in a terminal:</li>
 </ol>
-<pre><code># Add profile or key/secret information if necessary
+<pre><code># 1. Create the DynamoDb table.
+# Add profile or key/secret information if necessary.
 aws dynamodb create-table \
     --table-name KeyvStore \
     --attribute-definitions \
-        AttributeName=Key,AttributeType=S \
-        AttributeName=Value,AttributeType=S \
-    --key-schema AttributeName=Key,KeyType=HASH AttributeName=Value,KeyType=RANGE \
+        AttributeName=Cid,AttributeType=S \
+    --key-schema AttributeName=Cid,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+# 2. Enable the TTL attribute. You may need to wait for the table to finish the
+# creation process.
+# Add profile or key/secret information if necessary.
+aws dynamodb update-time-to-live \
+    --table-name KeyvStore \
+    --time-to-live-specification Enabled=true,AttributeName=Expiration
 </code></pre><h2 id="why-">Why?</h2>
 <p>This project is interesting when used with the <a href="npmjs.com/package/got">got</a> HTTP
 client (or directly using

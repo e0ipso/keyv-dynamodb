@@ -1,6 +1,7 @@
 # package directories
 /lib
 /config/local.*
+/scratch
 node_modules
 jspm_packages
 

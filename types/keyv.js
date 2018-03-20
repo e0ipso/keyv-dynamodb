@@ -33,10 +33,10 @@ export interface MapInterface {
    * @param {string} key
    *   The key for the store entry.
    *
-   * @return {Promise<*>}
-   *   TRUE if items were deleted.
+   * @return {Promise<void>}
+   *   Resolves when the item was deleted.
    */
-  delete(key: string): Promise<boolean>;
+  delete(key: string): Promise<void>;
 
   /**
    * Remove all the items from the store.

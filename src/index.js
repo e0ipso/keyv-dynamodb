@@ -15,7 +15,6 @@ import type { KeyvDynamoDbOptions } from '../types/common';
 
 const EventEmitter = require('events');
 const { DynamoDB } = require('aws-sdk');
-const pify = require('pify');
 const Promise = require('bluebird');
 
 /**
@@ -47,6 +46,8 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
       .then(isCreated => {
         if (isCreated) {
           this.needsInit = false;
+          this.emit('isInitialized');
+          return;
         }
         throw new Error(`MISSING_TABLE: The DynamoDB table ${this.tableName} does not exist.`);
       })
@@ -67,16 +68,17 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
     }
     // Calculate the record expiration.
     const params: PutItemInput = {
-      Items: {
-        Key: { S: key },
-        Value: { S: value },
+      Item: {
+        Cid: DynamoDB.Converter.input(key),
+        CacheData: DynamoDB.Converter.input(value),
       },
       TableName: this.tableName,
     };
     if (ttl) {
-      params.Items.Expiration = { N: Date.now() + (ttl * 1000) };
+      const exp: number = parseInt(Date.now() / 1000, 10) + ttl;
+      params.Item.Expiration = DynamoDB.Converter.input(exp);
     }
-    return pify(this.dynamo.putItem)(params)
+    return this.dynamo.putItem(params).promise()
       .then(() => {});
   }
 
@@ -93,14 +95,13 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
     // Query for the data.
     const params: GetItemInput = {
       TableName: this.tableName,
-      Key: { Key: { S: key } },
-      ProjectionExpression: 'Expiration,Value',
+      Key: { Cid: DynamoDB.Converter.input(key) },
     };
     return this.dynamo.getItem(params).promise()
       // Check if the record is expired.
       .then(this.deleteIfExpired.bind(this))
       .then((res: ?GetItemOutput) => res
-        ? this.extractOutputProperty(res, 'Value')
+        ? this.extractOutputProperty(res, 'CacheData')
         : res
       );
   }
@@ -108,7 +109,7 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
   /**
    * @inheritDoc
    */
-  delete(key: string): Promise<boolean> {
+  delete(key: string): Promise<void> {
     try {
       this.checkIfInitializationIsNeeded();
     }
@@ -116,11 +117,11 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
       return Promise.reject(error);
     }
     const params: DeleteItemInput = {
-      Key: { Key: { S: key } },
+      Key: { Cid: DynamoDB.Converter.input(key) },
       TableName: this.tableName,
     };
-    return pify(this.dynamo.deleteItem)(params)
-      .then(() => true);
+    return this.dynamo.deleteItem(params).promise()
+      .then(() => {});
   }
 
 
@@ -135,15 +136,13 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
       return Promise.reject(error);
     }
     const params: ScanInput = {
-      ExpressionAttributeNames: { K: 'Key' },
-      ProjectionExpression: "#K",
       TableName: this.tableName,
     };
-    return pify(this.dynamo.scan(params))
-      .then((res: ScanOutput) => this.extractOutputProperties(res, 'Key'))
+    return this.dynamo.scan(params).promise()
+      .then((res: ScanOutput) => this.extractOutputProperties(res, 'Cid'))
       .then((ids: Array<string>) => {
         const deleteRequests: Array<DeleteRequest> = ids.map(id => ({
-          DeleteRequest: { Key: { Key: { S: id } } },
+          DeleteRequest: { Key: { Cid: DynamoDB.Converter.input(id) } },
         }));
         // Batch writing only supports 25 deletions at a time in DynamoDB.
         const batches = this.chunkArray(deleteRequests, 25);
@@ -155,7 +154,7 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
                 [this.tableName]: batch,
               }
             };
-            return pify(this.dynamo.batchWriteItem(requestItems))
+            return this.dynamo.batchWriteItem(requestItems).promise();
           }),
           { concurrency: clearConcurrency }
         );
@@ -189,9 +188,9 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
    * @protected
    */
   tableExists(tableName: string): Promise<boolean> {
-    return pify(this.dynamo.describeTable)({
+    return this.dynamo.describeTable({
       TableName: tableName,
-    })
+    }).promise()
       .then(() => true)
       .catch(() => false);
   }
@@ -210,7 +209,7 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
    * @protected
    */
   extractOutputProperty(output: GetItemOutput, property: string): any {
-    return this.extractOutputProperties(output, property)[0];
+    return DynamoDB.Converter.output(output.Item[property]);
   }
 
   /**
@@ -247,7 +246,7 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
    */
   deleteIfExpired(res: GetItemOutput, key: string): ?GetItemOutput {
     const exp = parseInt(this.extractOutputProperty(res, 'Expiration'), 10);
-    if (exp > Date.now()) {
+    if (exp * 1000 < Date.now()) {
       // Schedule the item deletion when the record is expired.
       process.nextTick(() => this.delete(key));
       return undefined;

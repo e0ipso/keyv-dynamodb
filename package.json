@@ -24,11 +24,13 @@
     "@emdaer/cli": "^2.0.0",
     "@emdaer/plugin-contributors-details-github": "^2.0.0",
     "@emdaer/plugin-license-reference": "^2.0.0",
+    "@emdaer/plugin-shields": "^2.0.0",
     "@emdaer/plugin-value-from-package": "^2.0.0",
     "@emdaer/transform-prettier": "^2.0.0",
     "@emdaer/transform-table-of-contents": "^2.0.0",
     "babel-eslint": "^8.2.2",
     "condition-noop": "^1.0.0",
+    "coveralls": "^3.0.0",
     "eslint": "^4.19.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
@@ -84,7 +86,6 @@
   "private": false,
   "dependencies": {
     "aws-sdk": "^2.211.1",
-    "bluebird": "^3.5.1",
-    "pify": "^3.0.0"
+    "bluebird": "^3.5.1"
   }
 }

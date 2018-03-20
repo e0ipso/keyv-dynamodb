@@ -16,6 +16,17 @@
 
 <!--emdaer-t
   - '@emdaer/transform-table-of-contents'
+--> · <!--emdaer-p
+ - '@emdaer/plugin-shields'
+ - shields:
+     - alt: 'Travis'
+       image: 'travis/e0ipso/keyv-dynamodb.svg'
+       link: 'https://travis-ci.org/e0ipso/keyv-dynamodb/'
+       style: 'flat-square'
+     - alt: 'Documented with emdaer'
+       image: 'badge/📓-documented%20with%20emdaer-F06632.svg'
+       link: 'https://github.com/emdaer/emdaer'
+       style: 'flat-square'
 -->
 
 ## Install
@@ -26,14 +37,20 @@ fields. It is important to keep the field names as provided in the example. You
 will need to provision the [DynamoDB capacities](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ProvisionedThroughput.html)
 based on your expected usage. Execute in a terminal:
 ```
-# Add profile or key/secret information if necessary
+# 1. Create the DynamoDb table.
+# Add profile or key/secret information if necessary.
 aws dynamodb create-table \
     --table-name KeyvStore \
     --attribute-definitions \
-        AttributeName=Key,AttributeType=S \
-        AttributeName=Value,AttributeType=S \
-    --key-schema AttributeName=Key,KeyType=HASH AttributeName=Value,KeyType=RANGE \
+        AttributeName=Cid,AttributeType=S \
+    --key-schema AttributeName=Cid,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+# 2. Enable the TTL attribute. You may need to wait for the table to finish the
+# creation process.
+# Add profile or key/secret information if necessary.
+aws dynamodb update-time-to-live \
+    --table-name KeyvStore \
+    --time-to-live-specification Enabled=true,AttributeName=Expiration
 ```
 
 ## Why?
