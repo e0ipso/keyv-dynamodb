@@ -11,3 +11,5 @@ rules:
     - error
     -
       requireStringLiterals: false
+  class-methods-use-this:
+    - off

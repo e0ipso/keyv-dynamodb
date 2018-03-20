@@ -17,15 +17,41 @@ Dynamo DB storage for the Keyv project
 
 <ul>
 <li><a href="#install">Install</a></li>
+<li><a href="#why">Why?</a></li>
 <li><a href="#usage">Usage</a></li>
 <li><a href="#contributors">Contributors</a></li>
 <li><a href="#license">License</a></li>
 </ul>
 
 <h2 id="install">Install</h2>
-<ul>
+<ol>
 <li><code>yarn add @keyv/dynamodb</code></li>
-</ul>
+<li>Create the DynamoDB table using the <code>aws</code> CLI tool. Alternatively you can use
+the web dashboard to create the table, just make sure to create the expected
+fields. It is important to keep the field names as provided in the example. You
+will need to provision the <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ProvisionedThroughput.html">DynamoDB capacities</a>
+based on your expected usage. Execute in a terminal:</li>
+</ol>
+<pre><code># Add profile or key/secret information if necessary
+aws dynamodb create-table \
+    --table-name KeyvStore \
+    --attribute-definitions \
+        AttributeName=Key,AttributeType=S \
+        AttributeName=Value,AttributeType=S \
+    --key-schema AttributeName=Key,KeyType=HASH AttributeName=Value,KeyType=RANGE \
+    --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+</code></pre><h2 id="why-">Why?</h2>
+<p>This project is interesting when used with the <a href="npmjs.com/package/got">got</a> HTTP
+client (or directly using
+<a href="npmjs.com/package/cacheable-request">cacheable-request</a>) inside of a Serverless
+project. Traditional cache solutions like ElastiCache with Redis will force you
+to deploy inside of a VPC. This has negative implications with regards to
+performance (via Lambda cold-starts) and scalability (via limited subnet size).
+This will allow you to have an application cache backend that doesn&#39;t require a
+VPC, since DynamoDB connections from Lambda do not require to deploy into a VPC.</p>
+<p>You can also use this project as a stand-alone arbitrary cache back-end, without
+<a href="npmjs.com/package/got">got</a> or
+<a href="npmjs.com/package/cacheable-request">cacheable-request</a>).</p>
 <h2 id="usage">Usage</h2>
 <pre><code class="lang-js">const Keyv = require(&#39;keyv&#39;);
 
