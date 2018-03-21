@@ -99,7 +99,7 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
     };
     return this.dynamo.getItem(params).promise()
       // Check if the record is expired.
-      .then(this.deleteIfExpired.bind(this))
+      .then(res => this.deleteIfExpired(res, key))
       .then((res: ?GetItemOutput) => res
         ? this.extractOutputProperty(res, 'CacheData')
         : res
@@ -192,7 +192,10 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
       TableName: tableName,
     }).promise()
       .then(() => true)
-      .catch(() => false);
+      .catch((err) => {
+        this.emit('error', err);
+        return false;
+      });
   }
 
   /**
@@ -209,6 +212,9 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
    * @protected
    */
   extractOutputProperty(output: GetItemOutput, property: string): any {
+    if (typeof output.Item === 'undefined') {
+      return undefined;
+    }
     return DynamoDB.Converter.output(output.Item[property]);
   }
 

@@ -179,6 +179,7 @@ describe('The KeyvDynamoDb class', () => {
             return Promise.reject();
           }
         }));
+        sut.on('error', () => {});
         return sut.tableExists('the-table')
           .then(value => {
             expect(value).toBe(true);
@@ -188,6 +189,11 @@ describe('The KeyvDynamoDb class', () => {
             expect(value).toBe(false);
           });
       });
+    });
+
+    test('empty extractOutputProperty', () => {
+      expect.assertions(1);
+      expect(sut.extractOutputProperty({})).toBeUndefined();
     });
   });
 
