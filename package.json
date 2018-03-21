@@ -88,5 +88,8 @@
   "engines": {
     "node": ">=8.0.0"
   },
-  "private": false
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  }
 }
