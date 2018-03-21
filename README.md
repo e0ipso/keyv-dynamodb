@@ -5,7 +5,7 @@
 -->
 
 <p></p><h1 align="center">
-@keyv/dynamodb
+keyv-dynamodb
     <br>
     <img src="https://upload.wikimedia.org/wikipedia/commons/f/fd/DynamoDB.png" alt="Keyv DynamoDB logo" title="Keyv DynamoDB logo" width="100">
 </h1><p></p>
@@ -95,4 +95,4 @@ const keyv = new Keyv({ store: keyvDynamoDb });
 </details>
 
 <h2 id="license">License</h2>
-<p>@keyv/dynamodb is <a href="./LICENSE">GPL-2.0 licensed</a>.</p>
+<p>keyv-dynamodb is <a href="./LICENSE">GPL-2.0 licensed</a>.</p>

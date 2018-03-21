@@ -1,5 +1,5 @@
 {
-  "name": "@keyv/dynamodb",
+  "name": "keyv-dynamodb",
   "version": "1.0.1",
   "description": "Dynamo DB storage for the Keyv project",
   "main": "lib/index.js",
