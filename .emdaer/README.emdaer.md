@@ -73,27 +73,32 @@ You can also use this project as a stand-alone arbitrary cache back-end, without
 
 ## Usage
 ```js
-const Keyv = require('keyv');
- 
-const keyv = new Keyv('redis://user:pass@localhost:6379');
-keyv.on('error', handleConnectionError);
-```
+const KeyvDynamoDb = require('@keyv/dynamodb');
 
-Any valid redis.createClient() options will be passed directly through.
-
-e.g:
-```js
-const keyv = new Keyv('redis://user:pass@localhost:6379', { disable_resubscribing: true });
+const keyvDynamoDb = new KeyvDynamoDb({
+  tableName: 'KeyvStore',
+  clientOptions: {
+    // Any options here will be passed to the DynamoDB client.
+    region: 'eu-central-1',
+  }
+});
+keyvDynamoDb.on('error', handleConnectionError);
 ```
 
 Or you can manually create a storage adapter instance and pass it to Keyv:
 
 ```js
 const Keyv = require('keyv');
-const KeyvRedis = require('@keyv/redis');
+const KeyvDynamoDb = require('@keyv/dynamodb');
  
-const redis = new KeyvRedis('redis://user:pass@localhost:6379');
-const keyv = new Keyv({ store: redis });
+const keyvDynamoDb = new KeyvDynamoDb({
+  tableName: 'KeyvStore',
+  clientOptions: {
+    // Any options here will be passed to the DynamoDB client.
+    region: 'eu-central-1',
+  }
+});
+const keyv = new Keyv({ store: keyvDynamoDb });
 ```
 
 ## Contributors

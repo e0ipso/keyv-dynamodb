@@ -608,9 +608,9 @@ autolinker@~0.15.0:
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/autolinker/-/autolinker-0.15.3.tgz#342417d8f2f3461b14cf09088d5edf8791dc9832"
 
-aws-sdk@^2.211.1:
-  version "2.211.1"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.211.1.tgz#07f0a778741639c505e7c29b977894637ddca4ac"
+aws-sdk@^2.212.1:
+  version "2.212.1"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.212.1.tgz#833dbe8d837d46058a3772ac9bb73b69113136e4"
   dependencies:
     buffer "4.9.1"
     events "1.1.1"

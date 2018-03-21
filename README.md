@@ -60,23 +60,29 @@ VPC, since DynamoDB connections from Lambda do not require to deploy into a VPC.
 <a href="npmjs.com/package/got">got</a> or
 <a href="npmjs.com/package/cacheable-request">cacheable-request</a>).</p>
 <h2 id="usage">Usage</h2>
-<pre><code class="lang-js">const Keyv = require(&#39;keyv&#39;);
+<pre><code class="lang-js">const KeyvDynamoDb = require(&#39;@keyv/dynamodb&#39;);
 
-const keyv = new Keyv(&#39;redis://user:pass@localhost:6379&#39;);
-keyv.on(&#39;error&#39;, handleConnectionError);
-</code></pre>
-<p>Any valid redis.createClient() options will be passed directly through.</p>
-<p>e.g:</p>
-<pre><code class="lang-js">const keyv = new Keyv(&#39;redis://user:pass@localhost:6379&#39;, {
-  disable_resubscribing: true,
+const keyvDynamoDb = new KeyvDynamoDb({
+  tableName: &#39;KeyvStore&#39;,
+  clientOptions: {
+    // Any options here will be passed to the DynamoDB client.
+    region: &#39;eu-central-1&#39;,
+  },
 });
+keyvDynamoDb.on(&#39;error&#39;, handleConnectionError);
 </code></pre>
 <p>Or you can manually create a storage adapter instance and pass it to Keyv:</p>
 <pre><code class="lang-js">const Keyv = require(&#39;keyv&#39;);
-const KeyvRedis = require(&#39;@keyv/redis&#39;);
+const KeyvDynamoDb = require(&#39;@keyv/dynamodb&#39;);
 
-const redis = new KeyvRedis(&#39;redis://user:pass@localhost:6379&#39;);
-const keyv = new Keyv({ store: redis });
+const keyvDynamoDb = new KeyvDynamoDb({
+  tableName: &#39;KeyvStore&#39;,
+  clientOptions: {
+    // Any options here will be passed to the DynamoDB client.
+    region: &#39;eu-central-1&#39;,
+  },
+});
+const keyv = new Keyv({ store: keyvDynamoDb });
 </code></pre>
 <h2 id="contributors">Contributors</h2>
 <details>
