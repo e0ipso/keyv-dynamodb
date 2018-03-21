@@ -1,6 +1,6 @@
 {
   "name": "@keyv/dynamodb",
-  "version": "0.0.0-development",
+  "version": "0.0.0",
   "description": "Dynamo DB storage for the Keyv project",
   "main": "lib/index.js",
   "author": "Mateu Aguiló Bosch <mateu.aguilo.bosch@gmail.com>",
