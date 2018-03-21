@@ -85,9 +85,6 @@
     ]
   },
   "homepage": "https://github.com/e0ipso/keyv-dynamo#readme",
-  "engines": {
-    "node": ">=8.0.0"
-  },
   "private": false,
   "publishConfig": {
     "access": "public"
