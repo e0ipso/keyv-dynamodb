@@ -6,7 +6,7 @@
   "author": "Mateu Aguiló Bosch <mateu.aguilo.bosch@gmail.com>",
   "license": "GPL-2.0",
   "scripts": {
-    "build": "rimraf lib && flow-remove-types --all src/ --out-dir lib/",
+    "build": "rimraf lib && flow-remove-types --all src/ --out-dir lib/ && flow-copy-source src lib",
     "prepare": "yarn build",
     "test": "jest --coverage",
     "readme": "emdaer && git add *.md .emdaer/.offline",
