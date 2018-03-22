@@ -78,8 +78,10 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
       const exp: number = parseInt(Date.now() / 1000, 10) + ttl;
       params.Item.Expiration = DynamoDB.Converter.input(exp);
     }
-    return this.dynamo.putItem(params).promise()
-      .then(() => {});
+    return Promise.resolve()
+      .then(() => this.dynamo.putItem(params).promise())
+      .then(() => {})
+      .catch(this.handleError.bind(this));
   }
 
   /**
@@ -97,13 +99,15 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
       TableName: this.tableName,
       Key: { Cid: DynamoDB.Converter.input(key) },
     };
-    return this.dynamo.getItem(params).promise()
+    return Promise.resolve()
+      .then(() => this.dynamo.getItem(params).promise())
       // Check if the record is expired.
       .then(res => this.deleteIfExpired(res, key))
       .then((res: ?GetItemOutput) => res
         ? this.extractOutputProperty(res, 'CacheData')
         : res
-      );
+      )
+      .catch(this.handleError.bind(this));
   }
 
   /**
@@ -120,8 +124,10 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
       Key: { Cid: DynamoDB.Converter.input(key) },
       TableName: this.tableName,
     };
-    return this.dynamo.deleteItem(params).promise()
-      .then(() => {});
+    return Promise.resolve()
+      .then(() => this.dynamo.deleteItem(params).promise())
+      .then(() => {})
+      .catch(this.handleError.bind(this));
   }
 
 
@@ -138,7 +144,8 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
     const params: ScanInput = {
       TableName: this.tableName,
     };
-    return this.dynamo.scan(params).promise()
+    return Promise.resolve()
+      .then(() => this.dynamo.scan(params).promise())
       .then((res: ScanOutput) => this.extractOutputProperties(res, 'Cid'))
       .then((ids: Array<string>) => {
         const deleteRequests: Array<DeleteRequest> = ids.map(id => ({
@@ -159,7 +166,8 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
           { concurrency: clearConcurrency }
         );
       })
-      .then(() => {});
+      .then(() => {})
+      .catch(this.handleError.bind(this));
   }
 
   /**
@@ -188,14 +196,11 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
    * @protected
    */
   tableExists(tableName: string): Promise<boolean> {
-    return this.dynamo.describeTable({
-      TableName: tableName,
-    }).promise()
+    return Promise.resolve()
+      .then(() => this.dynamo.describeTable({ TableName: tableName }).promise())
       .then(() => true)
-      .catch((err) => {
-        this.emit('error', err);
-        return false;
-      });
+      .catch(this.handleError.bind(this))
+      .catch(() => false);
   }
 
   /**
@@ -281,6 +286,19 @@ class KeyvDynamoDb extends EventEmitter implements MapInterface {
       output.push(array.slice(i, i + chunkSize));
     }
     return output;
+  }
+
+  /**
+   * Handles a rejected promise by emitting an error and re-throwing it.
+   *
+   * @param {*} error
+   *   The error.
+   *
+   * @returns {boolean}
+   */
+  handleError(error: *): void {
+    this.emit('error', error);
+    throw error;
   }
 }
 

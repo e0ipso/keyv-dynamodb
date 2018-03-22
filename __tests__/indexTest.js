@@ -9,6 +9,7 @@ describe('The KeyvDynamoDb class', () => {
     sut.on('isInitialized', () => {
       expect(sut.needsInit).toBe(false);
     });
+    sut.on('error', () => {});
     stub.mockRestore();
   });
   test('the constructor errors', () => {
@@ -29,6 +30,7 @@ describe('The KeyvDynamoDb class', () => {
       const stub = jest.spyOn(KeyvDynamoDb.prototype, 'tableExists').mockImplementation(() =>
         Promise.resolve(true));
       sut = new KeyvDynamoDb({ tableName: 'the-table' });
+      sut.on('error', () => {});
       stub.mockRestore();
     });
 
