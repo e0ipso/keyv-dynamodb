@@ -74,17 +74,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/e0ipso/keyv-dynamo.git"
+    "url": "https://github.com/e0ipso/keyv-dynamodb.git"
   },
   "bugs": {
-    "url": "https://github.com/e0ipso/keyv-dynamo/issues"
+    "url": "https://github.com/e0ipso/keyv-dynamodb/issues"
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-angular"
     ]
   },
-  "homepage": "https://github.com/e0ipso/keyv-dynamo#readme",
+  "homepage": "https://github.com/e0ipso/keyv-dynamodb#readme",
   "private": false,
   "publishConfig": {
     "access": "public"
